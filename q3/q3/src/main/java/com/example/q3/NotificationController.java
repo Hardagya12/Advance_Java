@@ -17,6 +17,7 @@ public class NotificationController {
     @Autowired
     private SetterInjectedNotificationService setterService;
 
+    // Combined Route showing all three
     @GetMapping("/send")
     public String sendNotification(@RequestParam(defaultValue = "Test") String msg) {
         StringBuilder output = new StringBuilder();
@@ -27,5 +28,23 @@ public class NotificationController {
         output.append("3. ").append(setterService.sendEmail(msg)).append("\n");
         
         return output.toString();
+    }
+
+    // Individual Route for Field Injection
+    @GetMapping("/send/field")
+    public String sendField(@RequestParam(defaultValue = "Test") String msg) {
+        return fieldService.sendEmail(msg);
+    }
+
+    // Individual Route for Constructor Injection
+    @GetMapping("/send/constructor")
+    public String sendConstructor(@RequestParam(defaultValue = "Test") String msg) {
+        return constructorService.sendEmail(msg);
+    }
+
+    // Individual Route for Setter Injection
+    @GetMapping("/send/setter")
+    public String sendSetter(@RequestParam(defaultValue = "Test") String msg) {
+        return setterService.sendEmail(msg);
     }
 }
