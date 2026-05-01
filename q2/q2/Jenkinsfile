@@ -17,7 +17,7 @@ pipeline {
                 dir('q2/q2') {
                     // Build using Maven
                     echo 'Building the Spring Boot application...'
-                    bat 'mvnw.cmd clean compile'
+                    bat 'mvn clean compile'
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
                 dir('q2/q2') {
                     // Run test cases
                     echo 'Running test cases...'
-                    bat 'mvnw.cmd test'
+                    bat 'mvn test'
                 }
             }
         }
@@ -37,7 +37,7 @@ pipeline {
                 dir('q2/q2') {
                     // Generate build artifact (e.g., JAR file)
                     echo 'Generating build artifact...'
-                    bat 'mvnw.cmd package -DskipTests'
+                    bat 'mvn package -DskipTests'
                 }
             }
         }
@@ -50,8 +50,8 @@ pipeline {
             archiveArtifacts artifacts: 'q2/q2/target/*.jar', allowEmptyArchive: false
         }
         always {
-            // Save test reports
-            junit 'q2/q2/target/surefire-reports/*.xml'
+            // Save test reports (allowing empty results if the build fails before tests)
+            junit testResults: 'q2/q2/target/surefire-reports/*.xml', allowEmptyResults: true
         }
     }
 }
