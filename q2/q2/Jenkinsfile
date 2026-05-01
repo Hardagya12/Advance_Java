@@ -1,10 +1,7 @@
 pipeline {
     agent any
 
-    tools {
-        // Optional: Assuming 'maven' is configured in Jenkins global tools
-        maven 'Maven' 
-    }
+
 
     stages {
         stage('Checkout Code') {
