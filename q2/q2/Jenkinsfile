@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    tools {
+        // Optional: Assuming 'maven' is configured in Jenkins global tools
+        maven 'Maven' 
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Pull code from GitHub repository
+                echo 'Pulling code from repository...'
+                git branch: 'main', url: 'https://github.com/Hardagya12/Advance_Java'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('q2/q2') {
+                    // Build using Maven
+                    echo 'Building the Spring Boot application...'
+                    bat 'mvnw.cmd clean compile'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('q2/q2') {
+                    // Run test cases
+                    echo 'Running test cases...'
+                    bat 'mvnw.cmd test'
+                }
+            }
+        }
+
+        stage('Generate Build Artifact') {
+            steps {
+                dir('q2/q2') {
+                    // Generate build artifact (e.g., JAR file)
+                    echo 'Generating build artifact...'
+                    bat 'mvnw.cmd package -DskipTests'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            // Archive the generated build artifact
+            echo 'Archiving artifacts...'
+            archiveArtifacts artifacts: 'q2/q2/target/*.jar', allowEmptyArchive: false
+        }
+        always {
+            // Save test reports
+            junit 'q2/q2/target/surefire-reports/*.xml'
+        }
+    }
+}
